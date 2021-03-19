@@ -1,0 +1,176 @@
+{% extends 'store-base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('cart') }}">Shoping Cart</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <h3 class="bold">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+            Shipping Information
+        </h3>
+
+        <div class="card shadow-sm">
+            <form method="POST" action="{{ url_for('checkout') }}">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4 class="bold">Personal Information</h4>
+                        </div>
+                        {{ form.csrf_token }}
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Firstname</label>
+                                {{ form.first_name(class='form-control', placeholder="Your First Name") }}
+                            </div>
+                            <div class="form-group">
+                                <label>Lastname</label>
+                                {{ form.last_name(class='form-control', placeholder="Your Last Name") }}
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                {{ form.phone_number(class='form-control', placeholder="Your Phone Number") }}
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                {{ form.email(class='form-control', placeholder="Your Email") }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4 class="bold">Address</h4>
+
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Address</label>
+                                {{ form.address(class='form-control', placeholder="Your Street Address") }}
+                            </div>
+                            <div class="form-group">
+                                <label>City</label>
+                                {{ form.city(class='form-control', placeholder="Your City") }}
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>State</label>
+                                {{ form.state(class='form-control', placeholder="Your State") }}
+                            </div>
+                            <div class="form-group">
+                                <label>Country</label>
+                                {{ form.country(class='form-control', placeholder="Your Country") }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4 class="bold">Payment</h4>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Payment Option</label>
+                                {{ form.payment_type(class='form-control') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        Submit My Order
+                    </button>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        Launch modal
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    ...
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <h3 class="bold">
+            <i class="fa fa-list" aria-hidden="true"></i>
+            Cart Details
+        </h3>
+
+        <div class="card shadow-sm">
+            <h5 class="card-header bg-primary text-white">Current Cart Value</h5>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <p>
+                            {{ quantity_total }} Items <strong class="pull-right">&dollar;{{ "%.2f"|format(grand_total)
+                                }}</strong>
+                        </p>
+                        <p>
+                            24hr Shipping <strong class="pull-right">&dollar;10</strong>
+                        </p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Total <strong class="pull-right">&dollar;{{ "%.2f"|format(grand_total_plus_shipping)
+                                }}</strong></p>
+                    </li>
+
+                </ul>
+
+            </div>
+        </div>
+
+
+        <div class="card shadow-sm top-margin">
+            <h5 class="card-header bg-success text-white">Benefits</h5>
+            <div class="card-body">
+                Some of the benefits of shopping with us include:
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Buyer Protection</li>
+                <li class="list-group-item">Next Day Delivery</li>
+                <li class="list-group-item">Flexible Payment Options</li>
+                <li class="list-group-item">7day Money Back Guarantee</li>
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

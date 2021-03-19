@@ -1,0 +1,62 @@
+{% extends 'store-base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-3">Flask Shop!</h1>
+        <p class="lead">This is the world's largest and most excellent online shop demo that sells absolutely nothing!!
+        </p>
+        <hr class="my-4">
+        <p>Check out our wide assortment of stuff we sell. There is no ryme or reason at Flask Shop. We just sell stuff!
+        </p>
+    </div>
+    <div class="row">
+        <div class="container">
+            <div class="row d-flex justify-content-center text-center">
+
+                {% for product in products %}
+                <div class="col-sm-4">
+                    <!-- ********** Product Card *********** -->
+                    <div class="product-card">
+                        <div class="product-tumb">
+                            <a href="{{ url_for('product', id=product.id) }}"><img src="{{ product.image }}"
+                                    alt="{{ product.name }}"></a>
+                        </div>
+                        <div class="product-details">
+                            <h4><a href="{{ url_for('product', id=product.id) }}">{{ product.name }}</a></h4>
+
+                            <p>{{ product.description }}</p>
+                            <div class="product-bottom-details">
+                                <div class="product-price">&dollar;{{ "%.2f"|format(product.price / 100) }}</div>
+                                <div class="product-links">
+                                    <a href="{{ url_for('product', id=product.id) }}"><i class="fa fa-eye"></i></a>
+                                    {% if product.stock > 0 %}
+                                    <a href="{{ url_for('quick_add', id=product.id) }}"><i
+                                            class="fa fa-shopping-cart"></i></a>
+                                    {% endif %}
+                                </div>
+
+
+                            </div>
+                            <row>
+                                {% if product.stock <= 0 %} <div class="text-danger font-weight-light"
+                                    style="font-size: small;"> (Out Of Stock)
+                        </div>
+                        {% else %}
+                        <div class="text-muted font-weight-lighter"><small><em>There are {{
+                                    product.stock }} items in stock.</small></em></div>
+                        {% endif %}
+                        </row>
+                    </div>
+                </div>
+                <!-- *********************************** -->
+            </div>
+            {% endfor %}
+
+
+        </div>
+    </div>
+</div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <div class="login-form bg-light mt-4 p-4">
+                <form action="" method="POST" class="row g-3">
+                    {{ form.hidden_tag() }}
+                    <h4>Administrator Login</h4>
+                    <div class="col-12">
+                        {{ form.username.label(class="form-control-label") }}
+
+                        {% if form.username.errors %}
+                        {{ form.username(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.username(class="form-control", placeholder="Username") }}
+                        {% endif %}
+                    </div>
+                    <div class="col-12">
+                        {{ form.password.label(class="form-control-label") }}
+
+                        {% if form.password.errors %}
+                        {{ form.password(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.password(class="form-control", placeholder="Password") }}
+                        {% endif %}
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check space">
+                            {{ form.remember(class="form-check-input") }}
+                            {{ form.remember.label(class="form-check-label") }}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        {{ form.submit(class="btn btn-outline-success pull-right space") }}
+                    </div>
+                </form>
+                <hr class="mt-4">
+                <div class="col-12">
+
+                    <p class="text-center mb-0">Don't have an account yet? <a href="/signup">Signup</a></p>
+                    <!-- <small class="text-muted text-center mb-0">
+                        <a href="#">Forgot Password?</a>
+                    </small> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

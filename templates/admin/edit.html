@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Edit the {{product.name}} Product</h1>
+<!-- <ul>
+    <li>Name: {{ product.name }}</li>
+    <li>Price: {{ product.price }}</li>
+    <li>Stock: {{ product.stock }}</li>
+    <li>Description: {{ product.description }}</li>
+    <li>Image: <img src="{{product.image}}" class="rounded med" width="200"></li>
+</ul> -->
+<form action="" id="edit-product-form" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="form-name" class="form-label">Product Name</label>
+        <input type="text" class="form-control" id="form-name" value="{{product.name}}">
+    </div>
+
+    <div class="mb-3">
+        <label for="form-price" class="form-label">Price (in cents)</label>
+        <input type="text" class="form-control" id="form-price" value="{{product.price}}">
+    </div>
+
+    <div class="mb-3">
+        <label for="form-stock" class="form-label">Stock</label>
+        <input type="text" class="form-control" id="form-stock" value="{{product.stock}}">
+    </div>
+
+    <div class="mb-3">
+        <label for="form-description" class="form-label">Description</label>
+        <input type="text" class="form-control" id="form-description" value="{{product.description}}">
+    </div>
+    <button type="button" class="btn btn-success update-product" data-id="{{product.id}}">Update</button>
+    <a href=" {{ url_for('admin') }}" class="btn btn-danger">Cancel</a>
+</form>
+
+{% endblock %}
