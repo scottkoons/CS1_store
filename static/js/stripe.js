@@ -3,7 +3,7 @@ var stripe = Stripe("pk_test_a2S1FHi6Q2NegA9UJpfuC352001yTuA1VK");
 
 // The items the customer wants to buy
 var purchase = {
-    items: [{ id: "Shopping Cart" }]
+    items: [{ amount: 5555 }]
 };
 
 // Disable the button until we have Stripe set up on the page

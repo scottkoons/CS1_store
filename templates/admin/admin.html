@@ -108,7 +108,7 @@
                         <th>ID</th>
                         <th>Ref</th>
                         <th>Customer</th>
-                        <th width="100">Total</th>
+                        <!-- <th width="100">Total</th> -->
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -123,24 +123,11 @@
                         <td>{{ order.first_name }} {{ order.last_name }}</td>
                         {# <td>${{ order.order_total() / 100 }}</td> #}
                         {# <td>${{ "%.2f"|format(order.order_total() / 100) }}</td> #}
-                        <td>${{ "%.2f"|format(order.order_total() / 100) }}</td>
+                        {# <td>${{ "%.2f"|format(order.order_total() / 100) }}</td> #}
                         <td><a href="#" class="delete delete-order" title="Delete" data-toggle="tooltip"
                                 data-id="{{order.id}}"><i class=" fa fa-times-circle" aria-hidden="true"></i></a></td>
                     </tr>
                     {% endfor %}
-
-                    <!-- <tr>
-                        <td>2</td>
-                        <td>ACAFAE</td>
-                        <td>Don Know</td>
-                        <td>$52.49</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>BDCCEE</td>
-                        <td>Pablo Napp</td>
-                        <td>$110.99</td>
-                    </tr> -->
 
                 </tbody>
 

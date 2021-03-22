@@ -53,15 +53,16 @@ class Checkout(FlaskForm):
     address = StringField('Address')
     city = StringField('City')
     state = SelectField('State',
-                        choices=[('CA', 'California'), ('WA', 'Washington'),
-                                 ('NV', 'Nevada')])
+                        choices=[('CO', 'Colorado'), ('CA', 'California'), ('WA', 'Washington')
+                                 ])
     country = SelectField('Country',
                           choices=[('US', 'United States'),
                                    ('UK', 'United Kingdom'),
-                                   ('FRA', 'France')])
+                                   ('AQ', 'Antarctica')])
     payment_type = SelectField('Payment Type',
-                               choices=[('CK', 'Check'),
-                                        ('WT', 'Wire Transfer')])
+                               choices=[('VS', 'Visa'),
+                                        ('MC', 'Mastercard'),
+                                        ('AM', 'American Express')])
 
 
 class AddToCart(FlaskForm):

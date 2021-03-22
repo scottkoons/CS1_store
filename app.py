@@ -11,7 +11,7 @@ import stripe
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgres:///shop_db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ECHO"] = True
+app.config["SQLALCHEMY_ECHO"] = False
 app.config["SECRET_KEY"] = "usafa1993"
 app.config["UPLOADED_IMAGES_DEST"] = "uploads/images"
 
@@ -97,6 +97,10 @@ def admin():
 
 @app.route('/admin/order/<order_id>')
 def order(order_id):
+    if "user_id" not in session:
+        flash("Please login first!", "danger")
+        return redirect('/login')
+
     order = Order.query.filter_by(id=int(order_id)).first()
 
     return render_template('/admin/view-order.html', title='Order Overview', order=order)
@@ -104,6 +108,10 @@ def order(order_id):
 
 @app.route("/admin/order/<int:id>", methods=['DELETE'])
 def delete_order(id):
+    if "user_id" not in session:
+        flash("Please login first!", "danger")
+        return redirect('/login')
+
     order = Order.query.get_or_404(id)
     db.session.delete(order)
     db.session.commit()
@@ -231,6 +239,9 @@ def add():
 # Get JSON data for all product
 @app.route("/api/product")
 def list_product():
+    if "user_id" not in session:
+        flash("Please login first!", "danger")
+        return redirect('/login')
     """Returns json for all product in database."""
     all_product = [product.to_dict() for product in Product.query.all()]
     return jsonify(product=all_product)
@@ -238,12 +249,18 @@ def list_product():
 
 @app.route("/api/product/<int:id>")
 def get_product(id):
+    if "user_id" not in session:
+        flash("Please login first!", "danger")
+        return redirect('/login')
     product = Product.query.get_or_404(id)
     return render_template("/admin/edit.html", product=product)
 
 
 @app.route("/api/product/<int:id>", methods=['PATCH'])
 def update_product(id):
+    if "user_id" not in session:
+        flash("Please login first!", "danger")
+        return redirect('/login')
     form = UpdateProduct()
     data = request.json
 
@@ -263,6 +280,9 @@ def update_product(id):
 
 @app.route("/api/product/<int:id>", methods=['DELETE'])
 def delete_product(id):
+    if "user_id" not in session:
+        flash("Please login first!", "danger")
+        return redirect('/login')
     product = Product.query.get_or_404(id)
     db.session.delete(product)
     db.session.commit()
@@ -301,31 +321,21 @@ def handle_cart():
     return products, grand_total, grand_total_plus_shipping, quantity_total
 
 
-def calculate_order_amount(items):
-    # Replace this constant with a calculation of the order's amount
-    # Calculate the order total on the server to prevent
-    # people from directly manipulating the amount on the client
-    total = 100 * 2
-    return total
-
-
-@app.route('/stripe/checkout')
-def stripe_checkout():
-    return render_template('stripe-checkout.html')
-
-
 @app.route('/create-payment-intent', methods=['POST'])
 def create_payment():
-
+    products, grand_total, grand_total_plus_shipping, quantity_total = handle_cart()
+    # print(grand_total_plus_shipping)
     try:
         data = json.loads(request.data)
         intent = stripe.PaymentIntent.create(
-            amount=calculate_order_amount(data['items']),
+            amount=int(grand_total_plus_shipping * 100),
             currency='usd'
         )
-
+        # print(intent)
+        print(f"the grand total plus shipping is: {grand_total_plus_shipping}")
         return jsonify({
             'clientSecret': intent['client_secret']
         })
     except Exception as e:
+        print(e)
         return jsonify(error=str(e)), 403
