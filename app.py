@@ -17,20 +17,25 @@ app.config["UPLOADED_IMAGES_DEST"] = "uploads/images"
 
 connect_db(app)
 
+# Set image storage information
 images = UploadSet('images', IMAGES)
 configure_uploads(app, images)
 patch_request_class(app, 1024 * 1024)
+
+# Stripe secret key
 stripe.api_key = "sk_test_HjmEiebcMzZHRfIBgPfeWPeO00Af8WCWzO"
 
 
 @app.route('/')
 def index():
+    """Main route for initial user store view"""
     products = Product.query.all()
     return render_template('store.html', products=products)
 
 
 @app.route('/product/<id>')
 def product(id):
+    """View individual product when user click on the product image or title. Page shows the selected product's details"""
     product = Product.query.filter_by(id=id).first()
     form = AddToCart()
 
@@ -39,6 +44,7 @@ def product(id):
 
 @app.route('/quick-add/<id>')
 def quick_add(id):
+    """Route whe user clicks on the 'quickadd' shopping cart at the bottom left of product. Adds a single item to the cart."""
     if 'cart' not in session:
         session['cart'] = []
 
@@ -51,6 +57,7 @@ def quick_add(id):
 
 @app.route('/add-to-cart', methods=['POST'])
 def add_to_cart():
+    """Route when user adds product to cart."""
 
     if 'cart' not in session:
         session['cart'] = []
@@ -70,6 +77,7 @@ def add_to_cart():
 
 @app.route('/cart')
 def cart():
+    """Cart route. Calls the handle_cart method to collect all the information from the items in the cart"""
     products, grand_total, grand_total_plus_shipping, quantity_total = handle_cart()
 
     return render_template('cart.html', products=products, grand_total=grand_total, grand_total_plus_shipping=grand_total_plus_shipping, quantity_total=quantity_total)
@@ -77,6 +85,7 @@ def cart():
 
 @app.route('/remove-from-cart/<index>')
 def remove_from_cart(index):
+    """Route used to delete an item from the current cart session."""
     del session['cart'][int(index)]
     session.modified = True
     return redirect(url_for('cart'))
@@ -84,6 +93,7 @@ def remove_from_cart(index):
 
 @app.route('/admin')
 def admin():
+    """Main route for the admin panel. User must first be logged in to view the dashboard"""
     if "user_id" not in session:
         flash("Please login first!", "danger")
         return redirect('/login')
@@ -97,6 +107,7 @@ def admin():
 
 @app.route('/admin/order/<order_id>')
 def order(order_id):
+    """Route for viewing the order details tab on the main admin dashboard"""
     if "user_id" not in session:
         flash("Please login first!", "danger")
         return redirect('/login')
@@ -108,6 +119,7 @@ def order(order_id):
 
 @app.route("/admin/order/<int:id>", methods=['DELETE'])
 def delete_order(id):
+    """Route for deleting an order from the orders tab on the admin dashboard"""
     if "user_id" not in session:
         flash("Please login first!", "danger")
         return redirect('/login')
@@ -120,6 +132,7 @@ def delete_order(id):
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    """Route for users to create an account"""
     form = SignupForm()
     if "user_id" in session:
         return redirect('/admin')
@@ -145,6 +158,7 @@ def signup():
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
+    """Main route for checkout. Calls handle_cart to get and calculate all cart information."""
     form = Checkout()
     products, grand_total, grand_total_plus_shipping, quantity_total = handle_cart(
     )
@@ -179,6 +193,7 @@ def checkout():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_user():
+    """Route for user login"""
     form = LoginForm()
     if "user_id" in session:
         return redirect('/admin')
@@ -201,6 +216,7 @@ def login_user():
 
 @app.route('/logout')
 def logout_user():
+    """Route for user logout"""
     session.pop('user_id')
     flash("Goodbye!", "info")
     return redirect('/')
@@ -208,6 +224,7 @@ def logout_user():
 
 @app.route('/product', methods=['GET', 'POST'])
 def add():
+    """Route for adding products to the inventory"""
     form = AddProduct()
     if "user_id" not in session:
         flash("Please login first!", "danger")
@@ -239,16 +256,18 @@ def add():
 # Get JSON data for all product
 @app.route("/api/product")
 def list_product():
+    """Returns json for all product in database."""
     if "user_id" not in session:
         flash("Please login first!", "danger")
         return redirect('/login')
-    """Returns json for all product in database."""
+
     all_product = [product.to_dict() for product in Product.query.all()]
     return jsonify(product=all_product)
 
 
 @app.route("/api/product/<int:id>")
 def get_product(id):
+    """Returns json for selected product"""
     if "user_id" not in session:
         flash("Please login first!", "danger")
         return redirect('/login')
@@ -258,6 +277,7 @@ def get_product(id):
 
 @app.route("/api/product/<int:id>", methods=['PATCH'])
 def update_product(id):
+    """Updates product information"""
     if "user_id" not in session:
         flash("Please login first!", "danger")
         return redirect('/login')
@@ -280,6 +300,7 @@ def update_product(id):
 
 @app.route("/api/product/<int:id>", methods=['DELETE'])
 def delete_product(id):
+    """Deletes selected product"""
     if "user_id" not in session:
         flash("Please login first!", "danger")
         return redirect('/login')
@@ -290,6 +311,7 @@ def delete_product(id):
 
 
 def handle_cart():
+    """Calculate all cart information"""
     products = []
     grand_total = 0
     index = 0
@@ -323,6 +345,7 @@ def handle_cart():
 
 @app.route('/create-payment-intent', methods=['POST'])
 def create_payment():
+    """Receives cart total pricing and sends that to Stripe for payment processing"""
     products, grand_total, grand_total_plus_shipping, quantity_total = handle_cart()
     # print(grand_total_plus_shipping)
     try:
