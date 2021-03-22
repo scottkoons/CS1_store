@@ -19,5 +19,3 @@ The outward, public interface will allow to select items to add to their shoppin
 ## Admin Dashboard/Interface
 For simplicity, the administrator section can quickly jump to the admin section by clicking on the bottom left button. A user will be required to log in, but for demonstration purposes, an admin can create a new account as well. The ‘Product Manager’ dashboard allows the administrator to add (POST), edit (PATCH) or delete (DELETE) a store product. Under the ‘Orders’ tab, the admin can see each order and click on the reference number to see all of the order details. The administrator can also delete (DELETE) an order once it has theoretically shipped to the customer.
 
-## Project Link
-A working demonstation of the project is hosted on Heroku and can be found here:
