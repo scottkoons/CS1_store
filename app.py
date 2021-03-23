@@ -1,3 +1,4 @@
+import os
 import random
 from flask import Flask, render_template, redirect, session, flash, url_for, jsonify, request
 from models import *
@@ -12,7 +13,8 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgres:///shop_db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = False
-app.config["SECRET_KEY"] = "usafa1993"
+# app.config["SECRET_KEY"] = "usafa1993"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'usafa1993')
 app.config["UPLOADED_IMAGES_DEST"] = "uploads/images"
 
 connect_db(app)
