@@ -10,7 +10,8 @@ import os
 import stripe
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgres:///shop_db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+    'DATABASE_URL', "postgres:///shop_db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = False
 # app.config["SECRET_KEY"] = "usafa1993"
